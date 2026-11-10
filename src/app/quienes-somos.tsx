@@ -1,4 +1,5 @@
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+// src/app/quienes-somos.tsx
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function QuienesSomosScreen() {
   return (
@@ -10,7 +11,7 @@ export default function QuienesSomosScreen() {
         </Text>
         <Text style={styles.subtitle}>Nuestros Pastores</Text>
         <Text style={styles.text}>
-          Pastor Principal: Juan y María Pérez.{'\n'}
+          Pastor Principal: Juan y María Pérez{'\n'}
           Liderando con propósito y amor pastoral hacia la congregación.
         </Text>
       </View>

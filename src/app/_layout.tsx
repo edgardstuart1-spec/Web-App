@@ -1,52 +1,22 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Drawer } from 'expo-router/drawer';
-import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+// src/app/_layout.tsx
+import { Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+// Esto le indica a Expo Router (sobre todo en Web) por dónde arrancar el árbol de navegación
+export const unstable_settings = {
+  initialRouteName: '(drawer)',
+};
+
 export default function RootLayout() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return <View style={{ flex: 1, backgroundColor: '#ffffff' }} />;
-  }
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Drawer
-        screenOptions={{
-          drawerActiveTintColor: '#2563eb',
-          headerShown: true, // 1️⃣ Activamos la cabecera para que aparezca el botón de hamburguesa nativo
-          headerStyle: {
-            backgroundColor: '#ffffff',
-          },
-          headerTintColor: '#1e293b',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      >
-        <Drawer.Screen
-          name="(tabs)"
-          options={{
-            drawerLabel: 'Inicio / Pestañas',
-            title: 'Mi Iglesia',
-            drawerIcon: ({ color, size }) => <Ionicons name="home-outline" size={size || 24} color={color} />,
-          }}
-        />
-        <Drawer.Screen
-          name="quienes-somos"
-          options={{
-            drawerLabel: 'Quiénes Somos',
-            title: 'Quiénes Somos',
-            drawerIcon: ({ color, size }) => <Ionicons name="information-circle-outline" size={size || 24} color={color} />,
-          }}
-        />
-      </Drawer>
+      <Stack>
+        {/* Ocultamos el header del Stack para el drawer, ya que él maneja sus propios encabezados */}
+        <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+        
+        {/* Pantalla fuera del drawer: al estar en el Stack raíz, Expo Router le genera su flecha de retroceso nativa */}
+        <Stack.Screen name="quienes-somos" options={{ title: 'Quiénes Somos' }} />
+      </Stack>
     </GestureHandlerRootView>
   );
 }
