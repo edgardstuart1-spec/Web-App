@@ -1,25 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 
 export default function TabLayout() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Si está renderizando en el servidor, devolvemos un contenedor vacío para evitar el mismatch
-  if (!isClient) {
-    return <View style={{ flex: 1, backgroundColor: '#ffffff' }} />;
-  }
+  const { width } = useWindowDimensions();
+  const isWide = Platform.OS === 'web' && width >= 768;
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#2563eb',
         headerShown: false,
+        tabBarPosition: isWide ? 'top' : 'bottom',
+        tabBarLabelPosition: isWide ? 'beside-icon' : 'below-icon',
       }}
     >
       <Tabs.Screen
@@ -48,6 +41,15 @@ export default function TabLayout() {
         options={{
           title: 'Comunidad',
           tabBarIcon: ({ color, size }) => <Ionicons name="people" size={size || 24} color={color} />,
+        }}
+      />
+
+      {/* Oculta de la barra, pero accesible desde el drawer */}
+      <Tabs.Screen
+        name="quienes-somos"
+        options={{
+          title: 'Quiénes Somos',
+          tabBarItemStyle: { display: 'none' },
         }}
       />
     </Tabs>

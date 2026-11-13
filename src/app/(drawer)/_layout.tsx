@@ -1,27 +1,24 @@
 // src/app/(drawer)/_layout.tsx
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-// Importamos TODO (incluido el constructor de contenido) desde expo-router/drawer
-import { Drawer, DrawerContentScrollView, DrawerItemList } from 'expo-router/drawer';
+import { Drawer } from 'expo-router/drawer';
 import { Pressable, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function DrawerLayout() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   return (
     <Drawer
       drawerContent={(props) => (
-        <DrawerContentScrollView {...props}>
-          {/* Esta lista es provista nativamente por Expo Router */}
-          <DrawerItemList {...props} /> 
-          
-          {/* Tu botón personalizado que salta al Stack Raíz */}
+        <View style={{ flex: 1, backgroundColor: '#ffffff', paddingTop: 16 }}>
+
+          {/* Quiénes Somos */}
           <Pressable
             onPress={() => {
-              // Cerramos el drawer usando la navegación nativa integrada
               props.navigation.closeDrawer();
-              // Empujamos al stack raíz para que gane la flecha de regreso automáticamente
-              router.push('/quienes-somos'); 
+              router.navigate('/quienes-somos');
             }}
             style={({ pressed }) => ({
               flexDirection: 'row',
@@ -29,7 +26,6 @@ export default function DrawerLayout() {
               paddingVertical: 14,
               paddingHorizontal: 16,
               opacity: pressed ? 0.6 : 1,
-              backgroundColor: 'transparent'
             })}
           >
             <View style={{ width: 24, alignItems: 'center', marginRight: 32 }}>
@@ -39,18 +35,25 @@ export default function DrawerLayout() {
               Quiénes Somos
             </Text>
           </Pressable>
-        </DrawerContentScrollView>
+        </View>
       )}
       screenOptions={{
         headerShown: true,
+        drawerStyle: {
+          backgroundColor: '#ffffff',
+          width: 280,
+          maxWidth: '80%',
+          marginTop: insets.top,
+          marginBottom: insets.bottom,
+        },
       }}
     >
-      <Drawer.Screen 
-        name="(tabs)" 
-        options={{ 
-          drawerLabel: 'Inicio / Pestañas',
+      <Drawer.Screen
+        name="(tabs)"
+        options={{
           title: 'Mi Iglesia',
-        }} 
+          headerShown: true,
+        }}
       />
     </Drawer>
   );
