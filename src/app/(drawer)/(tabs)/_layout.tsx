@@ -1,18 +1,29 @@
+// src/app/(drawer)/(tabs)/_layout.tsx
 import { Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
-import { Platform, useWindowDimensions } from 'react-native';
+import { Tabs, useNavigation } from 'expo-router';
+import { Platform, useColorScheme, useWindowDimensions } from 'react-native';
+import Header from '../../../components/Header';
+import { Colors } from '../../../constants/theme';
 
 export default function TabLayout() {
   const { width } = useWindowDimensions();
   const isWide = Platform.OS === 'web' && width >= 768;
+  const navigation = useNavigation();
+  const colorScheme = useColorScheme() ?? 'light';
+  const theme = Colors[colorScheme];
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#2563eb',
-        headerShown: false,
+        header: () => <Header onOpenDrawer={() => (navigation as any).openDrawer()} />,
+        tabBarActiveTintColor: theme.primary,
+        headerShown: true,
         tabBarPosition: isWide ? 'top' : 'bottom',
         tabBarLabelPosition: isWide ? 'beside-icon' : 'below-icon',
+        tabBarStyle: Platform.OS === 'web' ? { display: 'none' } : {
+          backgroundColor: theme.background,
+          borderTopColor: theme.border,
+        },
       }}
     >
       <Tabs.Screen
@@ -44,11 +55,20 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Oculta de la barra, pero accesible desde el drawer */}
+      {/* Pantalla auxiliar oculta del menú inferior pero accesible por navegación */}
       <Tabs.Screen
         name="quienes-somos"
         options={{
           title: 'Quiénes Somos',
+          tabBarItemStyle: { display: 'none' },
+        }}
+      />
+
+      {/* NUEVO: Registramos el detalle del artículo para que no de error de ruta */}
+      <Tabs.Screen
+        name="articulo-detalle"
+        options={{
+          title: 'Detalle del Artículo',
           tabBarItemStyle: { display: 'none' },
         }}
       />
